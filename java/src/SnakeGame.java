@@ -26,42 +26,65 @@ public class SnakeGame {
     //Methods
     //Setters
     public int[] findTailExhaustive(){
-        exhaustiveChecks = 0;
+        this.exhaustiveChecks = 0;
+        int lengthTail = 0;
         headPosition;
-        int[] tailPosition;
-        for(int row = r-1; row <= r + 1; row++) {
-            for (int col = c - 1; col <= c + 1; col++) {
-                if (row < 0 || col < 0 || row >= size || col >= size || (row == r && col == c)) {
+        for(int i = r - 1; i <= r + 1; i++) {
+            for (int j = c - 1; j <= c + 1; j++) {
+                if (i < 0 || j < 0 || i >= size || j >= size || (i == r && j == c)) {
                     continue;
                 }
-                if (game[row][col] == true) {
-                    if (i == headPosition[0] && j == headPosition[1]) {
-                        continue;
-                    }
+                if (i == headPosition[0] && j == headPosition[1]) {
+                    lengthTail += 1;
+                    continue;
                 }
-                exhaustiveChecks += 1;
+                else if(this.game[i][j] == 1){
+                    lengthTail += 1;
+                    exhaustiveChecks += 1;
+                }
             }
-        return new int[] finalExhaustive [x, y, exhaustiveChecks];
         }
+        return new int[] finalExhaustive [x, y, lengthTail];
     }
 
-    public int[] findTailRecursive(){}
+    public int[] findTailRecursive(){
+        this.recursiveChecks = 0;
+        return findTailRecursive();
+    }
+
     private int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
         recursiveChecks = 0;
+        int lengthTail = 0;
+        currentPosition = this.headPosition;
+        previousPosition = currentPosition;
+        if(currentPosition[0] + 1 == true && currentPosition[1] == true){
+            previousPosition = currentPosition;
+            recursiveChecks += 1;
+            lengthTail +=1;
+            return findTailRecursive(currentPosition[0] + 1, currentPosition[1]);
+        }
+        if(currentPosition[0] == true && currentPosition[1] + 1 == true){
+            previousPosition = currentPosition;
+            recursiveChecks += 1;
+            lengthTail +=1;
+            return findTailRecursive(currentPosition[0], currentPosition[1] + 1);
+        }
+        return findTailRecursive(currentPosition[0], currentPosition[1],lengthTail)
     }
+
     private void resetCounters(){
-        exhaustiveChecks = 0;
-        recursiveChecks = 0;
+        exhaustiveChecks = this.exhaustiveChecks;
+        recursiveChecks = this.recursiveChecks;
     }
 
     //Getters
     private static int getRecursiveChecks(){
         return exhaustiveChecks;
-    }
+    } //make public for test cases
+
     private static int getExhaustiveChecks(){
         return recursiveChecks;
-    }
-
+    } //make public for test cases
 }
 
 //int recursiveCheck, int exhaustiveCheck

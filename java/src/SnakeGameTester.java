@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SnakeGameTester {
 
     @Test
+
     public int[] findTailExhaustive() {
         boolean[][] board = {{true, false, false}, {true, false, false}, {true, false, false}, {true, false, false}};
         SnakeGame sg = new SnakeGame(board, 0, 0);

@@ -1,97 +1,105 @@
 public class SnakeGame {
-    //Elements
+    // Elements
     private boolean[][] game;
     private int[] headPosition;
     private static int exhaustiveChecks;
     private static int recursiveChecks;
 
-    //Constructor 1
+    // Constructor 1
     SnakeGame() {
         this.game = new boolean[1][1];
+        resetCounters();
     }
 
-    //Constructor 2
-    SnakeGame(int size, int x, int y) {
-        this.game = new boolean[size][size];
-        this.headPosition = new int[] headPosition;
+    // Constructor 2
+    SnakeGame(boolean[][] board, int x, int y) {
+        this.game = board;
+        this.headPosition = new int[2];
         headPosition[0] = x;
         headPosition[1] = y;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                this.game[i][j] = game[i][j];
+        resetCounters();
+    }
+
+    // Methods
+    // Setters
+    public int[] findTailExhaustive() {
+        int neighbors = 0;
+        int size = 0;
+        int[] result = new int[3];
+        boolean tailFound = false;
+        for (int i = 0; i < game.length; i++) {
+            for (int j = 0; j < game[i].length; j++) {
+                if (tailFound)
+                    break;
+                exhaustiveChecks += 1;
+                if (game[i][j]) { // because is boolean no ==true is needed
+                    size++;
+                    neighbors = 0;
+                    for (int row = i - 1; row <= i + 1; row++) {
+                        for (int col = j - 1; col <= j + 1; col++) {
+                            if (row < 0 || col < 0 || row >= game.length || col >= game[0].length
+                                    || (row == i && col == j)) {
+                                continue;
+                            }
+                            if (game[row][col]) {
+                                neighbors += 1;
+                            }
+                        }
+                    }
+                    if ((neighbors == 1) && ((headPosition[0] != i) || (headPosition[1] != j))) {
+                        result[0] = i;
+                        result[1] = j;
+                        tailFound = true;
+                    }
+                }
             }
         }
+        result[2] = size;
+        return result;
     }
 
-    //Methods
-    //Setters
-    public int[] findTailExhaustive(){
-        this.exhaustiveChecks = 0;
-        int lengthTail = 0;
-        headPosition;
-        for(int i = r - 1; i <= r + 1; i++) {
-            for (int j = c - 1; j <= c + 1; j++) {
-                if (i < 0 || j < 0 || i >= size || j >= size || (i == r && j == c)) {
+    public int[] findTailRecursive() {
+        int[] headCopy = new int[3];
+        headCopy[0] = headPosition[0];
+        headCopy[1] = headPosition[1];
+        headCopy[2] = 1;
+        return findTailRecursive(headCopy, headCopy);
+    }
+
+    private int[] findTailRecursive(int[] currentPosition, int[] previousPosition) {
+        recursiveChecks++;
+        int i = currentPosition[0];
+        int j = currentPosition[1];
+        int size = currentPosition[2];
+        for (int row = i - 1; row <= i + 1; row++) {
+            for (int col = j - 1; col <= j + 1; col++) {
+                if (row < 0 || col < 0 || row >= game.length || col >= game[0].length || (row == i && col == j)) {
                     continue;
                 }
-                if (i == headPosition[0] && j == headPosition[1]) {
-                    lengthTail += 1;
-                    continue;
-                }
-                else if(this.game[i][j] == 1){
-                    lengthTail += 1;
-                    exhaustiveChecks += 1;
+                if (game[row][col]) {
+                    if (row == previousPosition[0] && col == previousPosition[1]) {
+                        continue;
+                    } else {
+                        int[] next = { row, col, size += 1 };
+                        currentPosition = findTailRecursive(next, currentPosition);
+                    }
                 }
             }
         }
-        return new int[] finalExhaustive [x, y, lengthTail];
+        return currentPosition;
     }
 
-    public int[] findTailRecursive(){
-        this.recursiveChecks = 0;
-        return findTailRecursive();
-    }
-
-    private int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
+    private void resetCounters() {
+        exhaustiveChecks = 0;
         recursiveChecks = 0;
-        int lengthTail = 0;
-        currentPosition = this.headPosition;
-        previousPosition = currentPosition;
-        if(currentPosition[0] + 1 == true && currentPosition[1] == true){
-            previousPosition = currentPosition;
-            recursiveChecks += 1;
-            lengthTail +=1;
-            return findTailRecursive(currentPosition[0] + 1, currentPosition[1]);
-        }
-        if(currentPosition[0] == true && currentPosition[1] + 1 == true){
-            previousPosition = currentPosition;
-            recursiveChecks += 1;
-            lengthTail +=1;
-            return findTailRecursive(currentPosition[0], currentPosition[1] + 1);
-        }
-        return findTailRecursive(currentPosition[0], currentPosition[1],lengthTail)
     }
 
-    private void resetCounters(){
-        exhaustiveChecks = this.exhaustiveChecks;
-        recursiveChecks = this.recursiveChecks;
-    }
-
-    //Getters
-    private static int getRecursiveChecks(){
-        return exhaustiveChecks;
-    } //make public for test cases
-
-    private static int getExhaustiveChecks(){
+    // Getters
+    public static int getRecursiveChecks() {
         return recursiveChecks;
-    } //make public for test cases
+    } // make public for test cases
+
+    public static int getExhaustiveChecks() {
+        return exhaustiveChecks;
+    } // make public for test cases
 }
-
-//int recursiveCheck, int exhaustiveCheck
-//findTailExhaustive 1. reset counters, 2. traverse board: row, 3. traverse board: column, 4. if part snake
-//5. if not find, 6. if tail: one neighbor and not head, 7. save tail position, 8.
-//else{ exhaustiveCheck --; }
-
-//1. reset counter, 2. start at head position, 3. look for neighbors that are true, 4. make sure the neighbor is not
-//where we came from, 5. save tail position, 6. count recChecks, 7. count snake length
-// for recursive, return array with [tail x, tail y, length]

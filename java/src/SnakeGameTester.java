@@ -2,9 +2,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SnakeGameTester {
-//Have issues when running jUnit Tests, I get that tests were not found.
+//Had issues when running jUnit Tests, I got that tests were not found.
 //I am adding 5 jUnit Test for each method, but I was not able to run them because of the mentioned problem
-//But I was able to run them using a different method in order to satisfy the requirements of this lab
+//However, I was able to run them using a different way in order to satisfy the requirements for this lab
 
     //Method Exhaustive checks
     @Test

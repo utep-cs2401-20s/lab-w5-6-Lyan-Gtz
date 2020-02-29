@@ -4,14 +4,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class SnakeGameTester {
 
     @Test
-
-    public int[] findTailExhaustive() {
+    public void test1() {
         boolean[][] board = {{true, false, false}, {true, false, false}, {true, false, false}, {true, false, false}};
         SnakeGame sg = new SnakeGame(board, 0, 0);
-        assertEquals((3, 0, 4), sg.result());
+        int[] result = new int[]{3,0,4};
+        assertArrayEquals(result, sg.findTailExhaustive());
+    }
+
+    @Test
+    public void test2() {
+        boolean[][] board = {{true, false, false}, {true, false, false}, {true, false, false}, {true, false, false}};
+        SnakeGame sg = new SnakeGame(board, 0, 0);
+        int[] tail = sg.findTailExhaustive();
+        assertEquals(tail, 3);
     }
 }
-
 
 /*public class SnakeGameTester{
     public static void main(String[] args){
